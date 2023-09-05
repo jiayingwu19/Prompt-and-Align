@@ -113,7 +113,7 @@ def create_train_loader(contents, labels, tokenizer, max_len, batch_size):
 def create_eval_loader(contents, labels, tokenizer, max_len, batch_size):
     ds = NewsDataset(texts = contents, labels = np.array(labels), tokenizer=tokenizer, max_len=max_len)
     
-    return DataLoader(ds, batch_size=batch_size, num_workers=5)
+    return DataLoader(ds, batch_size=batch_size, shuffle = False, num_workers=0)
 
 
 
