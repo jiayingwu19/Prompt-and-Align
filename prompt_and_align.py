@@ -233,18 +233,12 @@ def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_ep
 
 n_epochs = args.n_epochs
 batchsize = args.batch_size
-iterations=args.iters
+iterations = args.iters
 test_accs = []
 prec_all, rec_all, f1_all = [], [], []
 
-if args.n_samples == 16:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 16)
-elif args.n_samples == 32:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 32)
-elif args.n_samples == 64:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 64)
-elif args.n_samples == 128:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 128)
+# value of args.n_samples in [16, 32, 64, 128]
+x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, args.n_samples)
 
 
 for iter in range(iterations):
