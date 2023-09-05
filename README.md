@@ -41,8 +41,8 @@ The adjacency matrix of the news proximity graph is constructed via the followin
 
 1. Collect the user-news repost records for all samples (including `train_size` training samples and the test samples), specifically in the form of `[sid, tid, uid]` for each line, which means that user `uid` has reposted news articles `sid` and the repost has Tweet ID of `tid`.
 2. Filter the records with threshold $t_u$ to focus on the set of active social users. In our method, $t_u$ is set to 5, i.e., we only consider the social users with at least 5 repost records.
-3. Construct a user engagement matrix $\mathbf{B}$ of size `[num_active_users, num_news]` where the value of element [k, m] in the matrix represents the number of reposts between active user `u_k` and news article `T_m`.
-4. Formulate the adjacency matrix as $\mathbf{A}_{n}=\mathbf{B}^\top \mathbf{B}$, and conduct normalization to derive the final normalized adjacency matrix as $\mathbf{A}_{\mathcal{T}} = \mathbf{D}_{n}^{-\frac{1}{2}} \mathbf{A}_{n} \mathbf{D}_{n}^{-\frac{1}{2}}$.
+3. Construct a user engagement matrix $\mathbf{B}$ of size `[num_active_users, num_news]` where the value of element [k, m] in the matrix represents the number of reposts between active user $u_k$ and news article $T_m$.
+4. Formulate the adjacency matrix as $\mathbf{A}_ {n}=\mathbf{B}^\top \mathbf{B}$, and conduct normalization to derive the final normalized adjacency matrix as $\mathbf{A}_ {\mathcal{T}} = \mathbf{D}_ {n}^{-\frac{1}{2}} \mathbf{A}_ {n} \mathbf{D}_ {n}^{-\frac{1}{2}}$.
 
 
 **Raw Data**
