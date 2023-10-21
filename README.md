@@ -2,7 +2,7 @@
 
 This repo contains the data and code for the following paper:
 
-Jiaying Wu, Shen Li, Ailin Deng, Miao Xiong, Bryan Hooi. Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection, ACM Conference on Information and Knowledge Management (CIKM) 2023.
+Jiaying Wu, Shen Li, Ailin Deng, Miao Xiong, Bryan Hooi. Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection, ACM Conference on Information and Knowledge Management (CIKM) 2023. [![arXiv](https://img.shields.io/badge/arXiv-2309.16424-b31b1b.svg)](https://arxiv.org/abs/2309.16424)
 
 ## Abstract
 
@@ -78,4 +78,12 @@ jiayingwu [at] u.nus.edu
 If you find this repo or our work useful for your research, please consider citing our paper
 
 ```
-TBD
+@inproceedings{wu2023prompt,
+  author = {Wu, Jiaying and Li, Shen and Deng, Ailin and Xiong, Miao and Hooi, Bryan},
+  title = {Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection},
+  year = {2023},
+  booktitle = {Proceedings of the 32nd ACM International Conference on Information and Knowledge Management},
+  pages = {2726–2736}
+}
+
+```
