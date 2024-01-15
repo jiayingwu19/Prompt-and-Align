@@ -65,8 +65,8 @@ class NewsDataset(Dataset):
         elif label_logit == 1:
             label = np.array([0, 1])
 
-        encoding = self.tokenizer.encode_plus(text, add_special_tokens=True, max_length=self.max_len,
-                pad_to_max_length=True, truncation=True, return_token_type_ids=False, return_attention_mask=True, return_tensors='pt')
+        encoding = self.tokenizer.encode_plus(text, add_special_tokens = True, max_length = self.max_len,
+                pad_to_max_length = True, truncation = True, return_token_type_ids = False, return_attention_mask = True, return_tensors = 'pt')
         token_ids = encoding['input_ids']
         masked_position = (token_ids.squeeze() == tokenizer.mask_token_id).nonzero().item()
 
@@ -106,21 +106,21 @@ class BERTPrompt(nn.Module):
 
 
 def create_train_loader(contents, labels, tokenizer, max_len, batch_size):
-    ds = NewsDataset(texts = contents, labels = np.array(labels), tokenizer=tokenizer, max_len=max_len)
+    ds = NewsDataset(texts = contents, labels = np.array(labels), tokenizer = tokenizer, max_len = max_len)
     
-    return DataLoader(ds, batch_size=batch_size, shuffle=True, num_workers=5)
+    return DataLoader(ds, batch_size = batch_size, shuffle = True, num_workers = 5)
 
 def create_eval_loader(contents, labels, tokenizer, max_len, batch_size):
-    ds = NewsDataset(texts = contents, labels = np.array(labels), tokenizer=tokenizer, max_len=max_len)
+    ds = NewsDataset(texts = contents, labels = np.array(labels), tokenizer = tokenizer, max_len = max_len)
     
-    return DataLoader(ds, batch_size=batch_size, num_workers=5)
+    return DataLoader(ds, batch_size = batch_size, shuffle = False, num_workers = 0)
 
 
 
 def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_epochs, batch_size, datasetname, iter):
 
     model = BERTPrompt().to(device)
-    optimizer = AdamW(model.parameters(), lr=5e-5)
+    optimizer = AdamW(model.parameters(), lr = 5e-5)
     train_loader = create_train_loader(x_train, y_train, tokenizer, max_len, batch_size)
     test_loader = create_eval_loader(x_test, y_test, tokenizer, max_len, batch_size)
 
@@ -129,7 +129,7 @@ def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_ep
     if len(x_train) == 16:
         total_steps = 5 * n_epochs
         
-    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=total_steps)
+    scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps = 0, num_training_steps = total_steps)
 
     for epoch in range(n_epochs):
 
@@ -142,7 +142,7 @@ def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_ep
             targets = Batch_data["labels"].to(device)
             target_logits = torch.nonzero(targets)[:,-1]
 
-            out_labels = model(input_ids=input_ids, masked_position=Batch_data["masked_pos"][0].item())
+            out_labels = model(input_ids = input_ids, masked_position = Batch_data["masked_pos"][0].item())
 
             loss_func = nn.BCELoss()
             loss = loss_func(out_labels,targets)
@@ -152,7 +152,7 @@ def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_ep
             avg_loss.append(loss.item())
             optimizer.step()
             scheduler.step()
-            _, pred = out_labels.max(dim=-1)
+            _, pred = out_labels.max(dim = -1)
             correct = pred.eq(target_logits).sum().item()
             train_acc = correct / len(targets)
             avg_acc.append(train_acc)
@@ -175,17 +175,17 @@ def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_ep
                 targets = Batch_data["labels"].to(device)
                 target_logits = torch.nonzero(targets)[:,-1]
                
-                test_out = model(input_ids=input_ids, masked_position=Batch_data["masked_pos"][0].item())
-                _, val_pred = test_out.max(dim=1)
+                test_out = model(input_ids = input_ids, masked_position = Batch_data["masked_pos"][0].item())
+                _, val_pred = test_out.max(dim = -1)
 
                 y_pred.append(val_pred)
                 y_test.append(target_logits)
                 y_probs.append(test_out)
 
-        y_pred = torch.cat(y_pred, dim=0)
-        y_test = torch.cat(y_test, dim=0)
-        y_probs = torch.cat(y_probs, dim=0)
-        y_probs = F.softmax(y_probs, dim=-1)
+        y_pred = torch.cat(y_pred, dim = 0)
+        y_test = torch.cat(y_test, dim = 0)
+        y_probs = torch.cat(y_probs, dim = 0)
+        y_probs = F.softmax(y_probs, dim = -1)
         
         diff = []
         for i in range(y_probs.shape[0]):
@@ -233,18 +233,12 @@ def train_model(args, x_train, x_test, y_train, y_test, tokenizer, max_len, n_ep
 
 n_epochs = args.n_epochs
 batchsize = args.batch_size
-iterations=args.iters
+iterations = args.iters
 test_accs = []
 prec_all, rec_all, f1_all = [], [], []
 
-if args.n_samples == 16:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 16)
-elif args.n_samples == 32:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 32)
-elif args.n_samples == 64:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 64)
-elif args.n_samples == 128:
-    x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, 128)
+# value of args.n_samples in [16, 32, 64, 128]
+x_train, x_test, y_train, y_test = get_splits_fewshot(datasetname, args.n_samples)
 
 
 for iter in range(iterations):

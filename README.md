@@ -2,7 +2,7 @@
 
 This repo contains the data and code for the following paper:
 
-Jiaying Wu, Shen Li, Ailin Deng, Miao Xiong, Bryan Hooi. Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection, ACM Conference on Information and Knowledge Management (CIKM) 2023.
+Jiaying Wu, Shen Li, Ailin Deng, Miao Xiong, Bryan Hooi. Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection, ACM Conference on Information and Knowledge Management (CIKM) 2023. [![arXiv](https://img.shields.io/badge/arXiv-2309.16424-b31b1b.svg)](https://arxiv.org/abs/2309.16424)
 
 ## Abstract
 
@@ -41,8 +41,8 @@ The adjacency matrix of the news proximity graph is constructed via the followin
 
 1. Collect the user-news repost records for all samples (including `train_size` training samples and the test samples), specifically in the form of `[sid, tid, uid]` for each line, which means that user `uid` has reposted news articles `sid` and the repost has Tweet ID of `tid`.
 2. Filter the records with threshold $t_u$ to focus on the set of active social users. In our method, $t_u$ is set to 5, i.e., we only consider the social users with at least 5 repost records.
-3. Construct a user engagement matrix $\mathbf{B}$ of size `[num_active_users, num_news]` where the value of element [k, m] in the matrix represents the number of reposts between active user `u_k` and news article `T_m`.
-4. Formulate the adjacency matrix as $\mathbf{A}_{n}=\mathbf{B}^\top \mathbf{B}$, and conduct normalization to derive the final normalized adjacency matrix as $\mathbf{A}_{\mathcal{T}} = \mathbf{D}_{n}^{-\frac{1}{2}} \mathbf{A}_{n} \mathbf{D}_{n}^{-\frac{1}{2}}$.
+3. Construct a user engagement matrix $\mathbf{B}$ of size `[num_active_users, num_news]` where the value of element [k, m] in the matrix represents the number of reposts between active user $u_k$ and news article $T_m$.
+4. Formulate the adjacency matrix as $\mathbf{A}_ {n}=\mathbf{B}^\top \mathbf{B}$, and conduct normalization to derive the final normalized adjacency matrix as $\mathbf{A}_ {\mathcal{T}} = \mathbf{D}_ {n}^{-\frac{1}{2}} \mathbf{A}_ {n} \mathbf{D}_ {n}^{-\frac{1}{2}}$.
 
 
 **Raw Data**
@@ -50,6 +50,17 @@ The adjacency matrix of the news proximity graph is constructed via the followin
 We provide the raw user-news engagement records used to construct the above-mentioned news proximity graph from scratch, at `data/social_context_raw/[dataset_name]_socialcontext_train[train_size].csv`. There, each line is given as: `[sid,label,tid,uid]`, meaning that user `uid` has reposted news articles `sid` of veracity label (0: real; 1: fake), and the repost has Tweet ID of `tid`.
 
 We also provide the raw news articles and metadata in the format of `[news_id,label,title,content]` at `data/news_articles_raw/[dataset_name]_full_train[train_size].csv`. Here, `news_id` refer to the article's ID in the FakeNewsNet / FANG dataset. In each file, the [train_size] training samples are placed first, followed by the test samples.
+
+**Constructing the News Proximity Graph from the Raw Social Context** 
+
+As an alternative to using our pre-processed adjacency matrices under `data/adjs/`, we provide a pre-processing script at `Process/adj_matrix_fewshot.py` to construct the matrices from scratch.  
+
+Construct the adjacency matrices with the following command:
+
+```bash
+mkdir data/adjs_from_scratch
+python Process/adj_matrix_fewshot.py
+```
 
 **Obtaining Raw Social Context via FakeNewsNet Scripts** 
 
@@ -78,4 +89,12 @@ jiayingwu [at] u.nus.edu
 If you find this repo or our work useful for your research, please consider citing our paper
 
 ```
-TBD
+@inproceedings{wu2023prompt,
+  author = {Wu, Jiaying and Li, Shen and Deng, Ailin and Xiong, Miao and Hooi, Bryan},
+  title = {Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection},
+  year = {2023},
+  booktitle = {Proceedings of the 32nd ACM International Conference on Information and Knowledge Management},
+  pages = {2726–2736}
+}
+
+```
