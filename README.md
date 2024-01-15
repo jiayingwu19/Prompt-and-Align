@@ -89,12 +89,4 @@ jiayingwu [at] u.nus.edu
 If you find this repo or our work useful for your research, please consider citing our paper
 
 ```
-@inproceedings{wu2023prompt,
-  author = {Wu, Jiaying and Li, Shen and Deng, Ailin and Xiong, Miao and Hooi, Bryan},
-  title = {Prompt-and-Align: Prompt-Based Social Alignment for Few-Shot Fake News Detection},
-  year = {2023},
-  booktitle = {Proceedings of the 32nd ACM International Conference on Information and Knowledge Management},
-  pages = {2726–2736}
-}
-
-```
+TBD
